@@ -14,8 +14,12 @@ const Chat = () => {
                     <div>Icon 3</div>
                 </div>
             </div>
-            <Messages />
-            <Input />
+            {data.chatId && (
+                <>
+                    <Messages />
+                    <Input />
+                </>
+            )}
         </div>
     );
 };

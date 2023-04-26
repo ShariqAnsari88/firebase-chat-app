@@ -16,6 +16,11 @@ const Chats = () => {
                 doc(db, "userChats", currentUser.uid),
                 (doc) => {
                     setChats(doc.data());
+                    // dispatch({
+                    //     type: "CHANGE_USER",
+                    //     payload: Object.entries(doc.data() || {})[0][1]
+                    //         ?.userInfo,
+                    // });
                 }
             );
             return () => unsub();
@@ -32,15 +37,17 @@ const Chats = () => {
     return (
         <div className="flex py-5">
             <ul className="flex flex-col gap-3">
-                {Object.entries(chats || {})?.map((chat) => (
-                    <li
-                        key={chat[0]}
-                        onClick={() => handleSelect(chat[1].userInfo)}
-                    >
-                        <span>{chat[1].userInfo.displayName}</span>
-                        <p>{chat[1].userInfo.lastMessage?.text}</p>
-                    </li>
-                ))}
+                {Object.entries(chats || {})
+                    ?.sort((a, b) => b[1].date - a[1].date)
+                    ?.map((chat) => (
+                        <li
+                            key={chat[0]}
+                            onClick={() => handleSelect(chat[1].userInfo)}
+                        >
+                            <span>{chat[1].userInfo.displayName}</span>
+                            <p>{chat[1].lastMessage?.text}</p>
+                        </li>
+                    ))}
             </ul>
         </div>
     );

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Chat from "@/components/Chat";
 import Sidebar from "@/components/Sidebar";
 import Loader from "@/components/Loader";
+import LeftNav from "@/components/LeftNav";
 
 const Home = () => {
     const { currentUser, isLoading } = useAuth();
@@ -20,12 +21,11 @@ const Home = () => {
     return !currentUser ? (
         <Loader />
     ) : (
-        <div className="p-5">
+        <div className="bg-[#121521] flex h-[100vh]">
             <div className="flex">
-                <div className="w-[400px] px-5">
-                    <Sidebar />
-                </div>
-                <div className="w-[calc(100%-400px)] px-5">
+                <LeftNav />
+                <Sidebar />
+                <div className="w-[calc(100%-400px)]">
                     <Chat />
                 </div>
             </div>
