@@ -13,6 +13,9 @@ import {
 import { db } from "@/firebase/firebase";
 import { useAuth } from "@/firebase/authContext";
 import { useChatContext } from "@/context/chatContext";
+import Avatar from "./Avatar";
+import { RiSearch2Line } from "react-icons/ri";
+
 const Search = () => {
     const [username, setUsername] = useState("");
     const [user, setUser] = useState(null);
@@ -60,6 +63,7 @@ const Search = () => {
                         uid: user.uid,
                         displayName: user.displayName,
                         photoURL: user.photoURL,
+                        color: user.color,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
@@ -69,6 +73,7 @@ const Search = () => {
                         uid: currentUser.uid,
                         displayName: currentUser.displayName,
                         photoURL: currentUser.photoURL,
+                        color: currentUser.color,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
@@ -83,26 +88,36 @@ const Search = () => {
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                className="w-full outline-0 px-4 py-2 text-black"
-                placeholder="Search user"
-                onChange={(e) => setUsername(e.target.value)}
-                onKeyUp={onKeyUp}
-                value={username}
-            />
-
+        <div className="shrink-0">
+            <div className="relative">
+                <RiSearch2Line
+                    className="absolute top-4 left-4"
+                    color="#B1B2B6"
+                />
+                <input
+                    type="text"
+                    placeholder="Search user..."
+                    onChange={(e) => setUsername(e.target.value)}
+                    onKeyUp={onKeyUp}
+                    value={username}
+                    autoFocus
+                    className="w-full h-12 rounded-xl bg-[#2E343D] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
+                />
+            </div>
             {err && <div>User not found!</div>}
             {user && (
-                <div className="flex items-center gap-3" onClick={handleSelect}>
-                    <div className="w-9 h-9 rounded-full overflow-hidden">
-                        <img
-                            src={user.photoURL}
-                            className="block w-full h-full object-cover object-center"
-                        />
+                <div
+                    onClick={handleSelect}
+                    className="mt-5 flex items-center gap-4 rounded-xl hover:bg-[#6a8bfd] py-2 px-4 cursor-pointer"
+                >
+                    <Avatar size="medium" user={user} />
+                    <div className="flex flex-col gap-1 grow">
+                        <span className="text-base text-white flex  items-center justify-between">
+                            <div className="font-medium">
+                                {user.displayName}
+                            </div>
+                        </span>
                     </div>
-                    <span>{user.displayName}</span>
                 </div>
             )}
         </div>

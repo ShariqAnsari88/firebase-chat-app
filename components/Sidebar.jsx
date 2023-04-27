@@ -1,11 +1,9 @@
 import React from "react";
-import Search from "./Search";
 import Chats from "./Chats";
 const Sidebar = () => {
     return (
-        <div className="w-[500px] bg-[#161a29] p-5">
-            <div className="flex flex-col gap-5">
-                {/* <Search /> */}
+        <div className="w-[400px] p-5 overflow-auto">
+            <div className="flex flex-col h-full">
                 <Chats />
             </div>
         </div>

@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 
 import { useAuth } from "@/firebase/authContext";
 import Loader from "@/components/Loader";
+import { profileColors } from "@/utils/constants";
 
 const Register = () => {
     const router = useRouter();
@@ -25,6 +26,7 @@ const Register = () => {
         const email = e.target[1].value;
         const password = e.target[2].value;
         const file = e.target[3].files[0];
+        const colorIndex = Math.floor(Math.random() * profileColors.length);
 
         try {
             const { user } = await createUserWithEmailAndPassword(
@@ -34,51 +36,70 @@ const Register = () => {
             );
             console.log(user);
 
-            const storageRef = ref(storage, displayName);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-            uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    // Observe state change events such as progress, pause, and resume
-                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                    const progress =
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log("Upload is " + progress + "% done");
-                    switch (snapshot.state) {
-                        case "paused":
-                            console.log("Upload is paused");
-                            break;
-                        case "running":
-                            console.log("Upload is running");
-                            break;
-                    }
-                },
-                (error) => {
-                    console.error(error);
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(
-                        async (downloadURL) => {
-                            await updateProfile(user, {
-                                displayName,
-                                photoURL: downloadURL,
-                            });
-                            console.log("File available at", downloadURL);
-
-                            await setDoc(doc(db, "users", user.uid), {
-                                uid: user.uid,
-                                displayName,
-                                email,
-                                photoURL: downloadURL,
-                            });
-
-                            await setDoc(doc(db, "userChats", user.uid), {});
-
-                            router.push("/");
+            if (file) {
+                const storageRef = ref(storage, displayName);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        // Observe state change events such as progress, pause, and resume
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress =
+                            (snapshot.bytesTransferred / snapshot.totalBytes) *
+                            100;
+                        console.log("Upload is " + progress + "% done");
+                        switch (snapshot.state) {
+                            case "paused":
+                                console.log("Upload is paused");
+                                break;
+                            case "running":
+                                console.log("Upload is running");
+                                break;
                         }
-                    );
-                }
-            );
+                    },
+                    (error) => {
+                        console.error(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(
+                            async (downloadURL) => {
+                                await updateProfile(user, {
+                                    displayName,
+                                    photoURL: downloadURL,
+                                });
+                                console.log("File available at", downloadURL);
+
+                                await setDoc(doc(db, "users", user.uid), {
+                                    uid: user.uid,
+                                    displayName,
+                                    email,
+                                    photoURL: downloadURL,
+                                    color: profileColors[colorIndex],
+                                });
+
+                                await setDoc(
+                                    doc(db, "userChats", user.uid),
+                                    {}
+                                );
+
+                                router.push("/");
+                            }
+                        );
+                    }
+                );
+            } else {
+                await updateProfile(user, {
+                    displayName,
+                });
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    displayName,
+                    email,
+                    color: profileColors[colorIndex],
+                });
+                await setDoc(doc(db, "userChats", user.uid), {});
+                router.push("/");
+            }
         } catch (error) {
             console.error(error);
         }

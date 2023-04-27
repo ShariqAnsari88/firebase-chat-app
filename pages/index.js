@@ -21,11 +21,11 @@ const Home = () => {
     return !currentUser ? (
         <Loader />
     ) : (
-        <div className="bg-[#121521] flex h-[100vh]">
-            <div className="flex">
+        <div className="bg-[#131313] flex h-[100vh]">
+            <div className="flex w-full">
                 <LeftNav />
-                <Sidebar />
-                <div className="w-[calc(100%-500px)]">
+                <div className="flex bg-[#202329] rounded-3xl w-full">
+                    <Sidebar />
                     <Chat />
                 </div>
             </div>
