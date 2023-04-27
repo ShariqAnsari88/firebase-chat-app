@@ -12,7 +12,7 @@ const Avatar = ({ size, user }) => {
 
     return (
         <div
-            className={`${c} rounded-full overflow-hidden bg-blue-500 flex items-center justify-center text-base`}
+            className={`${c} rounded-full overflow-hidden bg-blue-500 flex items-center justify-center text-base flex-shrink-0`}
         >
             {user.photoURL ? (
                 <Image

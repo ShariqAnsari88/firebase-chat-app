@@ -25,7 +25,7 @@ const Home = () => {
             <div className="flex">
                 <LeftNav />
                 <Sidebar />
-                <div className="w-[calc(100%-400px)]">
+                <div className="w-[calc(100%-500px)]">
                     <Chat />
                 </div>
             </div>
