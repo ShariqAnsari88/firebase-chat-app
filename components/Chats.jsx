@@ -4,8 +4,8 @@ import { db } from "@/firebase/firebase";
 import { doc, onSnapshot, Timestamp } from "firebase/firestore";
 import { useChatContext } from "@/context/chatContext";
 import Avatar from "./Avatar";
-import moment from "moment";
 import { RiSearch2Line } from "react-icons/ri";
+import { formatDate } from "@/utils/helpers";
 
 const Chats = () => {
     const [chats, setChats] = useState([]);
@@ -39,24 +39,24 @@ const Chats = () => {
         dispatch({ type: "CHANGE_USER", payload: user });
     };
 
-    const formatDate = (date) => {
-        const now = new Date();
-        const diff = now.getTime() - date.getTime();
+    // const formatDate = (date) => {
+    //     const now = new Date();
+    //     const diff = now.getTime() - date.getTime();
 
-        if (diff < 60000) {
-            return "now";
-        }
+    //     if (diff < 60000) {
+    //         return "now";
+    //     }
 
-        if (diff < 3600000) {
-            return `${Math.round(diff / 60000)} min ago`;
-        }
+    //     if (diff < 3600000) {
+    //         return `${Math.round(diff / 60000)} min ago`;
+    //     }
 
-        if (diff < 86400000) {
-            return moment(date).format("h:mm A");
-        }
+    //     if (diff < 86400000) {
+    //         return moment(date).format("h:mm A");
+    //     }
 
-        return moment(date).format("MM/DD/YY");
-    };
+    //     return moment(date).format("MM/DD/YY");
+    // };
 
     const filteredChats = Object.entries(chats || {})
         .filter(
@@ -82,7 +82,7 @@ const Chats = () => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search username..."
-                    className="w-[300px] h-12 rounded-xl bg-[#2E343D] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
+                    className="w-[300px] h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
                 />
             </div>
             <ul className="flex flex-col w-full my-5 gap-[2px]">
@@ -108,11 +108,11 @@ const Chats = () => {
                                     <div className="font-medium">
                                         {chat[1].userInfo.displayName}
                                     </div>
-                                    <div className="text-sm text-[#8B8D93]">
+                                    <div className="text-xs text-[#8B8D93]">
                                         {formatDate(date)}
                                     </div>
                                 </span>
-                                <p className="text-sm text-[#8B8D93]">
+                                <p className="text-sm text-[#8B8D93] line-clamp-1">
                                     {chat[1].lastMessage?.text ||
                                         "Send first message"}
                                 </p>

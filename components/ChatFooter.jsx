@@ -11,6 +11,9 @@ import {
 import { db, storage } from "@/firebase/firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import Icon from "./Icon";
+import { CgAttachment } from "react-icons/cg";
+import { TbSend } from "react-icons/tb";
 
 const Input = () => {
     const [text, setText] = useState("");
@@ -90,21 +93,38 @@ const Input = () => {
     };
 
     return (
-        <div className="flex gap-5 justify-between items-center">
+        <div className="flex justify-between items-center bg-[#131313]/[0.5] p-2 rounded-xl">
+            <div>
+                <input
+                    type="file"
+                    id="fileUploader"
+                    className="hidden"
+                    onChange={(e) => setImg(e.target.files[0])}
+                />
+                <label htmlFor="fileUploader">
+                    <Icon
+                        size="large"
+                        icon={<CgAttachment size={20} color="#8B8D93" />}
+                    />
+                </label>
+            </div>
+
             <input
                 type="text"
-                className="w-full outline-0 px-4 py-2 text-black"
-                placeholder="Message type here.."
+                className="w-full outline-0 px-2 py-2 text-white bg-transparent placeholder:text-[#B1B2B6] outline-none text-base"
+                placeholder="Type a message"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
             />
-            <div className="flex shrink-0 gap-5">
-                <input
-                    type="file"
-                    onChange={(e) => setImg(e.target.files[0])}
-                />
-                <button onClick={handleSend}>Send</button>
-            </div>
+
+            <button
+                onClick={handleSend}
+                className={`h-10 w-10 rounded-xl shrink-0 flex justify-center items-center ${
+                    text.trim().length > 0 ? "bg-[#6b8afd]" : ""
+                }`}
+            >
+                <TbSend size={20} color="#fff" />
+            </button>
         </div>
     );
 };

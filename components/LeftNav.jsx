@@ -11,7 +11,7 @@ const LeftNav = () => {
     const [userPopup, setUserPopup] = useState(false);
     const { signOut, currentUser } = useAuth();
     return (
-        <div className="w-[80px] flex flex-col items-center justify-between py-5">
+        <div className="w-[80px] flex flex-col items-center justify-between py-5 shrink-0">
             {currentUser && <Avatar size="large" user={currentUser} />}
 
             <div className="flex flex-col gap-3">

@@ -27,3 +27,24 @@ body {
     -webkit-backdrop-filter: blur(4px);
     border-radius: 10px;
 }
+
+.scrollbar {
+    scrollbar-color: #2e343d transparent;
+    scrollbar-width: thin;
+}
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+.scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 10px;
+    opacity: 0;
+}
+.scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #2e343d;
+    opacity: 1;
+}

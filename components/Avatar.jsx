@@ -18,6 +18,7 @@ const Avatar = ({ size, user }) => {
             : size === "large"
             ? "w-10 h-10"
             : "w-14 h-14";
+    const f = size === "x-large" ? "text-2xl" : "text-base";
     return (
         <div
             className={`${c} rounded-2xl overflow-hidden flex items-center justify-center text-base flex-shrink-0`}
@@ -31,8 +32,8 @@ const Avatar = ({ size, user }) => {
                     className="object-cover object-center w-full h-full"
                 />
             ) : (
-                <span className="uppercase font-semibold">
-                    {user.displayName.charAt(0)}
+                <span className={`uppercase font-semibold ${f}`}>
+                    {user.displayName?.charAt(0)}
                 </span>
             )}
         </div>

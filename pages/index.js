@@ -22,9 +22,9 @@ const Home = () => {
         <Loader />
     ) : (
         <div className="bg-[#131313] flex h-[100vh]">
-            <div className="flex w-full">
+            <div className="flex w-full shrink-0">
                 <LeftNav />
-                <div className="flex bg-[#202329] rounded-3xl w-full">
+                <div className="flex bg-[#202329] rounded-3xl grow">
                     <Sidebar />
                     <Chat />
                 </div>

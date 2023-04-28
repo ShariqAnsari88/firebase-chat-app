@@ -101,7 +101,7 @@ const Search = () => {
                     onKeyUp={onKeyUp}
                     value={username}
                     autoFocus
-                    className="w-full h-12 rounded-xl bg-[#2E343D] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
+                    className="w-full h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
                 />
             </div>
             {err && <div>User not found!</div>}
