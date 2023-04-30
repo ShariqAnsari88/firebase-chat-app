@@ -1,7 +1,10 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import useIsOnline from "@/hook/useIsOnline";
 
 const Avatar = ({ size, user }) => {
+    const { online } = useIsOnline(user?.uid);
+
     const s =
         size === "small"
             ? 32
@@ -21,16 +24,29 @@ const Avatar = ({ size, user }) => {
     const f = size === "x-large" ? "text-2xl" : "text-base";
     return (
         <div
-            className={`${c} rounded-2xl overflow-hidden flex items-center justify-center text-base flex-shrink-0`}
+            className={`${c} rounded-full flex items-center justify-center text-base flex-shrink-0 relative`}
             style={{ backgroundColor: user.color }}
         >
+            {online && (
+                <>
+                    {size === "large" && (
+                        <span className="w-[10px] h-[10px] bg-green-500 rounded-full absolute bottom-[2px] right-[2px] " />
+                    )}
+                    {size === "x-large" && (
+                        <span className="w-[12px] h-[12px] bg-green-500 rounded-full absolute bottom-[3px] right-[3px] " />
+                    )}
+                </>
+            )}
+
             {user.photoURL ? (
-                <Image
-                    width={s}
-                    height={s}
-                    src={user.photoURL}
-                    className="object-cover object-center w-full h-full"
-                />
+                <div className={`${c} overflow-hidden rounded-full`}>
+                    <Image
+                        width={s}
+                        height={s}
+                        src={user.photoURL}
+                        className="object-cover object-center w-full h-full"
+                    />
+                </div>
             ) : (
                 <span className={`uppercase font-semibold ${f}`}>
                     {user.displayName?.charAt(0)}

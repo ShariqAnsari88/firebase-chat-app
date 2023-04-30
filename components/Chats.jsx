@@ -7,24 +7,48 @@ import Avatar from "./Avatar";
 import { RiSearch2Line } from "react-icons/ri";
 import { formatDate } from "@/utils/helpers";
 
+let runOnce = true;
 const Chats = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
-    const [query, setQuery] = useState("");
+    const [search, setSearch] = useState("");
     const { currentUser } = useAuth();
     const { dispatch } = useChatContext();
+
+    const filteredChats = Object.entries(chats || {})
+        .filter(
+            ([, chat]) =>
+                chat?.userInfo?.displayName
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                chat?.lastMessage?.text
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+        )
+        .sort((a, b) => b[1].date - a[1].date);
 
     useEffect(() => {
         const getChats = () => {
             const unsub = onSnapshot(
                 doc(db, "userChats", currentUser.uid),
                 (doc) => {
-                    setChats(doc.data());
-                    // dispatch({
-                    //     type: "CHANGE_USER",
-                    //     payload: Object.entries(doc.data() || {})[0][1]
-                    //         ?.userInfo,
-                    // });
+                    if (doc.exists()) {
+                        const data = doc.data();
+                        setChats(data);
+                        if (runOnce) {
+                            runOnce = false;
+                            const firstChat = Object.values(data).sort(
+                                (a, b) => {
+                                    return b.date - a.date;
+                                }
+                            )[0];
+                            setSelectedChat(firstChat?.userInfo);
+                            dispatch({
+                                type: "CHANGE_USER",
+                                payload: firstChat?.userInfo,
+                            });
+                        }
+                    }
                 }
             );
             return () => unsub();
@@ -32,43 +56,10 @@ const Chats = () => {
         currentUser.uid && getChats();
     }, []);
 
-    console.log(chats);
-
     const handleSelect = (user) => {
         setSelectedChat(user);
         dispatch({ type: "CHANGE_USER", payload: user });
     };
-
-    // const formatDate = (date) => {
-    //     const now = new Date();
-    //     const diff = now.getTime() - date.getTime();
-
-    //     if (diff < 60000) {
-    //         return "now";
-    //     }
-
-    //     if (diff < 3600000) {
-    //         return `${Math.round(diff / 60000)} min ago`;
-    //     }
-
-    //     if (diff < 86400000) {
-    //         return moment(date).format("h:mm A");
-    //     }
-
-    //     return moment(date).format("MM/DD/YY");
-    // };
-
-    const filteredChats = Object.entries(chats || {})
-        .filter(
-            ([, chat]) =>
-                chat.userInfo.displayName
-                    .toLowerCase()
-                    .includes(query.toLowerCase()) ||
-                chat.lastMessage?.text
-                    .toLowerCase()
-                    .includes(query.toLowerCase())
-        )
-        .sort((a, b) => b[1].date - a[1].date);
 
     return (
         <div className="flex flex-col h-full">
@@ -79,8 +70,8 @@ const Chats = () => {
                 />
                 <input
                     type="Text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search username..."
                     className="w-[300px] h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
                 />
@@ -96,9 +87,9 @@ const Chats = () => {
                         <li
                             key={chat[0]}
                             onClick={() => handleSelect(chat[1].userInfo)}
-                            className={`h-[90px] flex items-center gap-4 rounded-3xl hover:bg-[#2E343D] p-4 cursor-pointer ${
+                            className={`h-[90px] flex items-center gap-4 rounded-3xl hover:bg-[#131313] p-4 cursor-pointer ${
                                 selectedChat?.uid === chat[1].userInfo.uid
-                                    ? "bg-[#2E343D]"
+                                    ? "bg-[#131313]"
                                     : ""
                             }`}
                         >

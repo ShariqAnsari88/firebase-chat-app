@@ -7,10 +7,13 @@ import Chat from "@/components/Chat";
 import Sidebar from "@/components/Sidebar";
 import Loader from "@/components/Loader";
 import LeftNav from "@/components/LeftNav";
+import { useChatContext } from "@/context/chatContext";
 
 const Home = () => {
     const { currentUser, isLoading } = useAuth();
     const router = useRouter();
+
+    const { data } = useChatContext();
 
     useEffect(() => {
         if (!isLoading && !currentUser) {
@@ -24,9 +27,9 @@ const Home = () => {
         <div className="bg-[#131313] flex h-[100vh]">
             <div className="flex w-full shrink-0">
                 <LeftNav />
-                <div className="flex bg-[#202329] rounded-3xl grow">
+                <div className="flex bg-[#202329] grow">
                     <Sidebar />
-                    <Chat />
+                    {data.user && <Chat />}
                 </div>
             </div>
         </div>

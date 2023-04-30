@@ -14,7 +14,7 @@ export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
     const INITIAL_STATE = {
         chatId: "",
-        user: {},
+        user: null,
     };
 
     const chatReducer = (state, action) => {

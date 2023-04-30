@@ -40,7 +40,10 @@ const Message = ({ message }) => {
                 >
                     <div className="text-sm">{message.text}</div>
                     {message.img && (
-                        <img src={message.img} className="rounded-3xl" />
+                        <img
+                            src={message.img}
+                            className="rounded-3xl max-w-[250px]"
+                        />
                     )}
                 </div>
             </div>

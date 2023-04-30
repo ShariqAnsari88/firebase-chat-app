@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useChatContext } from "@/context/chatContext";
 import { useAuth } from "@/firebase/authContext";
 import {
     Timestamp,
     arrayUnion,
     doc,
+    onSnapshot,
     serverTimestamp,
     updateDoc,
 } from "firebase/firestore";
@@ -15,12 +16,54 @@ import Icon from "./Icon";
 import { CgAttachment } from "react-icons/cg";
 import { TbSend } from "react-icons/tb";
 
+let typingTimeout = null;
+
 const Input = () => {
     const [text, setText] = useState("");
     const [img, setImg] = useState(null);
+    const [isTyping, setIsTyping] = useState(false);
 
     const { data } = useChatContext();
     const { currentUser } = useAuth();
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(
+            doc(db, "userChats", currentUser.uid),
+            (docSnapshot) => {
+                const data = docSnapshot.data();
+                setIsTyping(data?.isTyping || false);
+            }
+        );
+
+        return () => {
+            unsubscribe();
+        };
+    }, [currentUser.uid]);
+
+    const handleTyping = async (event) => {
+        setText(event.target.value);
+        await updateDoc(doc(db, "userChats", data?.user?.uid), {
+            isTyping: true,
+        });
+
+        // If the user was previously typing, clear the timeout
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+
+        // Set a new timeout for 1.5 seconds after the last keystroke
+        typingTimeout = setTimeout(async () => {
+            // Send a typing indicator to other users indicating that this user has stopped typing
+            console.log("User has stopped typing");
+
+            await updateDoc(doc(db, "userChats", data?.user?.uid), {
+                isTyping: false,
+            });
+
+            // Reset the timeout
+            typingTimeout = null;
+        }, 500);
+    };
 
     const handleSend = async () => {
         if (img) {
@@ -92,6 +135,12 @@ const Input = () => {
         setImg(null);
     };
 
+    const onKeyUp = (event) => {
+        if (event.key === "Enter") {
+            handleSend();
+        }
+    };
+
     return (
         <div className="flex justify-between items-center bg-[#131313]/[0.5] p-2 rounded-xl">
             <div>
@@ -109,12 +158,15 @@ const Input = () => {
                 </label>
             </div>
 
+            {isTyping && <div>{"User is typing..."}</div>}
+
             <input
                 type="text"
                 className="w-full outline-0 px-2 py-2 text-white bg-transparent placeholder:text-[#B1B2B6] outline-none text-base"
                 placeholder="Type a message"
-                onChange={(e) => setText(e.target.value)}
                 value={text}
+                onChange={handleTyping}
+                onKeyUp={onKeyUp}
             />
 
             <button

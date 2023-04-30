@@ -11,7 +11,9 @@ const Messages = () => {
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
-            scrollToBottom();
+            setTimeout(() => {
+                scrollToBottom();
+            }, 0);
         });
         return () => unsub();
     }, [data.chatId]);
