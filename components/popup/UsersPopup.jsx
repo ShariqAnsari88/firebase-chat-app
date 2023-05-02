@@ -93,7 +93,7 @@ const UsersPopup = (props) => {
         <PopupWrapper {...props} title="Add User">
             <Search />
 
-            <div className="mt-5 flex flex-col gap-2 grow relative overflow-auto">
+            <div className="mt-5 flex flex-col gap-2 grow relative overflow-auto scrollbar">
                 <div className="absolute w-full">
                     {users &&
                         users.map((user) => (

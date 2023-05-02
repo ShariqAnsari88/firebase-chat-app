@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import Message from "./Message";
 import { useChatContext } from "@/context/chatContext";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
+import { useAuth } from "@/firebase/authContext";
+import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 const Messages = () => {
     const [messages, setMessages] = useState([]);
     const { data } = useChatContext();
+    const { currentUser } = useAuth();
     const ref = useRef();
 
     useEffect(() => {
@@ -30,9 +33,15 @@ const Messages = () => {
             ref={ref}
             className="grow p-5 overflow-auto scrollbar flex flex-col"
         >
-            {messages?.map((m) => (
-                <Message message={m} key={m.id} />
-            ))}
+            {messages
+                ?.filter(
+                    (m) =>
+                        m?.deletedInfo?.[currentUser.uid] !== DELETED_FOR_ME &&
+                        !m?.deletedInfo?.deletedForEveryone
+                )
+                ?.map((m) => {
+                    return <Message message={m} key={m.id} />;
+                })}
         </div>
     );
 };

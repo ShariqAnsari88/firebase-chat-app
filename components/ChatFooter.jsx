@@ -142,7 +142,7 @@ const Input = () => {
     };
 
     return (
-        <div className="flex justify-between items-center bg-[#131313]/[0.5] p-2 rounded-xl">
+        <div className="flex justify-between items-center bg-[#131313]/[0.5] p-2 rounded-xl relative">
             <div>
                 <input
                     type="file"
@@ -158,7 +158,14 @@ const Input = () => {
                 </label>
             </div>
 
-            {isTyping && <div>{"User is typing..."}</div>}
+            {isTyping && (
+                <div className="absolute -top-6 left-4 bg-[#202329] w-full h-6">
+                    <div className="flex gap-2 w-full h-full opacity-50 text-sm text-white">
+                        {`${data.user.displayName} is typing`}
+                        <img src="/typing.svg" />
+                    </div>
+                </div>
+            )}
 
             <input
                 type="text"

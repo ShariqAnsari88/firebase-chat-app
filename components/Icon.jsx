@@ -1,6 +1,6 @@
 import React from "react";
 
-const Icon = ({ size, icon, onClick }) => {
+const Icon = ({ size, icon, onClick, className }) => {
     let c =
         size === "small"
             ? "w-8 h-8"
@@ -12,7 +12,7 @@ const Icon = ({ size, icon, onClick }) => {
 
     return (
         <div
-            className={`${c} rounded-3xl flex items-center justify-center hover:bg-[#2e333d] cursor-pointer group`}
+            className={`${c} rounded-3xl flex items-center justify-center hover:bg-[#2e333d] cursor-pointer ${className}`}
             onClick={onClick}
         >
             {icon && icon}
