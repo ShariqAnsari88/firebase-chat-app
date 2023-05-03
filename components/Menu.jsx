@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import ClickAwayListener from "react-click-away-listener";
-import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 
-const Menu = ({ self, setShowMenu, showMenu, deleteMessage }) => {
+const Menu = ({ self, setShowMenu, showMenu, setShowDeletePopup, editMsg }) => {
     const ref = useRef();
 
     useEffect(() => {
@@ -22,14 +21,23 @@ const Menu = ({ self, setShowMenu, showMenu, deleteMessage }) => {
                 }`}
             >
                 <ul className="flex flex-col py-2">
-                    <li className="flex items-center py-3 px-5 hover:bg-black cursor-pointer">
-                        Edit message
-                    </li>
+                    {self && (
+                        <li
+                            className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                editMsg();
+                                setShowMenu(false);
+                            }}
+                        >
+                            Edit message
+                        </li>
+                    )}
                     <li
                         className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
-                            deleteMessage(DELETED_FOR_ME);
+                            setShowDeletePopup();
                         }}
                     >
                         Delete message

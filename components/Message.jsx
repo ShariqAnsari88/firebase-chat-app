@@ -9,9 +9,11 @@ import { GoChevronDown } from "react-icons/go";
 import Icon from "./Icon";
 import Menu from "./Menu";
 import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
+import DeleteMsgPopup from "./popup/DeleteMsgPopup";
 
 const Message = ({ message }) => {
-    const { data } = useChatContext();
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const { data, setEditMsg } = useChatContext();
     const { currentUser } = useAuth();
     const [showMenu, setShowMenu] = useState(false);
 
@@ -58,12 +60,23 @@ const Message = ({ message }) => {
         }
     };
 
+    const deletePopupHandler = () => {
+        setShowDeletePopup(true);
+        setShowMenu(false);
+    };
+
     return (
-        <div
-            ref={ref}
-            className={`mb-5 max-w-[75%] ${self ? "self-end" : ""}`}
-            // onClick={deleteMessage}
-        >
+        <div ref={ref} className={`mb-5 max-w-[75%] ${self ? "self-end" : ""}`}>
+            {showDeletePopup && (
+                <DeleteMsgPopup
+                    onHide={() => setShowDeletePopup(false)}
+                    deleteMessage={deleteMessage}
+                    className="DeleteMsgPopup"
+                    noHeader={true}
+                    shortHeight={true}
+                    self={self}
+                />
+            )}
             <div
                 className={`flex items-end gap-3 mb-1 ${
                     self ? "justify-start flex-row-reverse" : ""
@@ -109,7 +122,8 @@ const Message = ({ message }) => {
                                 self={self}
                                 setShowMenu={setShowMenu}
                                 showMenu={showMenu}
-                                deleteMessage={deleteMessage}
+                                setShowDeletePopup={deletePopupHandler}
+                                editMsg={() => setEditMsg(message)}
                             />
                         )}
                     </div>

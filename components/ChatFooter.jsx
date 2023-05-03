@@ -5,6 +5,7 @@ import {
     Timestamp,
     arrayUnion,
     doc,
+    getDoc,
     onSnapshot,
     serverTimestamp,
     updateDoc,
@@ -23,8 +24,12 @@ const Input = () => {
     const [img, setImg] = useState(null);
     const [isTyping, setIsTyping] = useState(false);
 
-    const { data } = useChatContext();
+    const { data, editMsg, setEditMsg } = useChatContext();
     const { currentUser } = useAuth();
+
+    useEffect(() => {
+        setText(editMsg?.text || "");
+    }, [editMsg]);
 
     useEffect(() => {
         const unsubscribe = onSnapshot(
@@ -135,9 +140,82 @@ const Input = () => {
         setImg(null);
     };
 
+    const handleEdit = async () => {
+        try {
+            const messageID = editMsg.id;
+            const chatRef = doc(db, "chats", data.chatId);
+
+            // Retrieve the chat document from Firestore
+            const chatDoc = await getDoc(chatRef);
+
+            if (img) {
+                const storageRef = ref(storage, uuid());
+                const uploadTask = uploadBytesResumable(storageRef, img);
+
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        // Observe state change events such as progress, pause, and resume
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress =
+                            (snapshot.bytesTransferred / snapshot.totalBytes) *
+                            100;
+                        console.log("Upload is " + progress + "% done");
+                        switch (snapshot.state) {
+                            case "paused":
+                                console.log("Upload is paused");
+                                break;
+                            case "running":
+                                console.log("Upload is running");
+                                break;
+                        }
+                    },
+                    (error) => {
+                        console.error(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(
+                            async (downloadURL) => {
+                                // Create a new "messages" array that excludes the message with the matching ID
+                                let updatedMessages = chatDoc
+                                    .data()
+                                    .messages.map((message) => {
+                                        if (message.id === messageID) {
+                                            message.text = text;
+                                            message.img = downloadURL;
+                                        }
+                                        return message;
+                                    });
+
+                                await updateDoc(chatRef, {
+                                    messages: updatedMessages,
+                                });
+                            }
+                        );
+                    }
+                );
+            } else {
+                // Create a new "messages" array that excludes the message with the matching ID
+                let updatedMessages = chatDoc.data().messages.map((message) => {
+                    if (message.id === messageID) {
+                        message.text = text;
+                    }
+                    return message;
+                });
+                await updateDoc(chatRef, { messages: updatedMessages });
+            }
+
+            setText("");
+            setImg(null);
+            setEditMsg(null);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const onKeyUp = (event) => {
         if (event.key === "Enter") {
-            handleSend();
+            !editMsg ? handleSend() : handleEdit();
         }
     };
 
@@ -177,7 +255,7 @@ const Input = () => {
             />
 
             <button
-                onClick={handleSend}
+                onClick={!editMsg ? handleSend : handleEdit}
                 className={`h-10 w-10 rounded-xl shrink-0 flex justify-center items-center ${
                     text.trim().length > 0 ? "bg-[#6b8afd]" : ""
                 }`}

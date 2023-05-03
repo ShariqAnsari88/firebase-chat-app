@@ -5,13 +5,13 @@ import {
     useEffect,
     useReducer,
 } from "react";
-import { onAuthStateChanged, signOut as authSignOut } from "firebase/auth";
 import { useAuth } from "@/firebase/authContext";
 
 const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
+    const [editMsg, setEditMsg] = useState(null);
     const INITIAL_STATE = {
         chatId: "",
         user: null,
@@ -35,7 +35,9 @@ export const ChatContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
     return (
-        <ChatContext.Provider value={{ data: state, dispatch }}>
+        <ChatContext.Provider
+            value={{ data: state, dispatch, editMsg, setEditMsg }}
+        >
             {children}
         </ChatContext.Provider>
     );
