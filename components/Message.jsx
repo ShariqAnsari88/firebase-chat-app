@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useChatContext } from "@/context/chatContext";
 import { useAuth } from "@/firebase/authContext";
 import Avatar from "./Avatar";
-import { formatDate } from "@/utils/helpers";
+import { formatDate, wrapEmojisInHtmlTag } from "@/utils/helpers";
 import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { GoChevronDown } from "react-icons/go";
@@ -94,7 +94,12 @@ const Message = ({ message }) => {
                             : "rounded-bl-md bg-[#131313]"
                     }`}
                 >
-                    <div className="text-sm">{message.text}</div>
+                    <div
+                        className="text-sm"
+                        dangerouslySetInnerHTML={{
+                            __html: wrapEmojisInHtmlTag(message.text),
+                        }}
+                    ></div>
                     {message.img && (
                         <img
                             src={message.img}

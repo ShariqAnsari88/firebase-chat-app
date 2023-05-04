@@ -13,7 +13,7 @@ const Chats = () => {
     const [selectedChat, setSelectedChat] = useState(null);
     const [search, setSearch] = useState("");
     const { currentUser } = useAuth();
-    const { dispatch } = useChatContext();
+    const { data, dispatch, resetFooterStates } = useChatContext();
 
     const filteredChats = Object.entries(chats || {})
         .filter(
@@ -26,6 +26,10 @@ const Chats = () => {
                     .includes(search.toLowerCase())
         )
         .sort((a, b) => b[1].date - a[1].date);
+
+    useEffect(() => {
+        resetFooterStates();
+    }, [data?.chatId]);
 
     useEffect(() => {
         const getChats = () => {
