@@ -8,11 +8,11 @@ const Icon = ({ size, icon, onClick, className }) => {
             ? "w-9 h-9"
             : size === "large"
             ? "w-10 h-10"
-            : "w-14 h-14";
+            : "w-12 h-12";
 
     return (
         <div
-            className={`${c} rounded-3xl flex items-center justify-center hover:bg-[#2e333d] cursor-pointer ${className}`}
+            className={`${c} rounded-full flex items-center justify-center hover:bg-[#2e333d] cursor-pointer ${className}`}
             onClick={onClick}
         >
             {icon && icon}

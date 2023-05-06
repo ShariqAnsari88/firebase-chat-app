@@ -14,7 +14,7 @@ import {
 import { db } from "@/firebase/firebase";
 import Avatar from "../Avatar";
 
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import { useChatContext } from "@/context/chatContext";
 
 const UsersPopup = (props) => {

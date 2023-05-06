@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import useIsOnline from "@/hook/useIsOnline";
 
-const Avatar = ({ size, user }) => {
+const Avatar = ({ size, user, onClick }) => {
     const { online } = useIsOnline(user?.uid);
 
     const s =
@@ -12,6 +12,8 @@ const Avatar = ({ size, user }) => {
             ? 36
             : size === "x-large"
             ? 56
+            : size === "xx-large"
+            ? 96
             : 40;
     const c =
         size === "small"
@@ -20,12 +22,20 @@ const Avatar = ({ size, user }) => {
             ? "w-9 h-9"
             : size === "large"
             ? "w-10 h-10"
-            : "w-14 h-14";
-    const f = size === "x-large" ? "text-2xl" : "text-base";
+            : size === "x-large"
+            ? "w-14 h-14"
+            : "w-24 h-24";
+    const f =
+        size === "x-large"
+            ? "text-2xl"
+            : size === "xx-large"
+            ? "text-4xl"
+            : "text-base";
     return (
         <div
             className={`${c} rounded-full flex items-center justify-center text-base flex-shrink-0 relative`}
             style={{ backgroundColor: user.color }}
+            onClick={onClick}
         >
             {online && (
                 <>

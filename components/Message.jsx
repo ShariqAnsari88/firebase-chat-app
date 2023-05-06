@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useChatContext } from "@/context/chatContext";
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import Avatar from "./Avatar";
 import { formatDate, wrapEmojisInHtmlTag } from "@/utils/helpers";
 import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";

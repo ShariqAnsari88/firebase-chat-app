@@ -5,7 +5,7 @@ import {
     useEffect,
     useReducer,
 } from "react";
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 
 const ChatContext = createContext();
 

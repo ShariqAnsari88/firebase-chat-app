@@ -6,7 +6,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import Loader from "@/components/Loader";
 import { profileColors } from "@/utils/constants";
 

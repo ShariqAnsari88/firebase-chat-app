@@ -3,7 +3,7 @@ import Message from "./Message";
 import { useChatContext } from "@/context/chatContext";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 const Messages = () => {
     const [messages, setMessages] = useState([]);

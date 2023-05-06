@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useChatContext } from "@/context/chatContext";
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import { db, storage } from "@/firebase/firebase";
 
 import { v4 as uuid } from "uuid";

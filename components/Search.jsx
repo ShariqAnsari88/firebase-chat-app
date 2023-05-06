@@ -11,7 +11,7 @@ import {
     setDoc,
 } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import { useChatContext } from "@/context/chatContext";
 import Avatar from "./Avatar";
 import { RiSearch2Line } from "react-icons/ri";
@@ -101,24 +101,40 @@ const Search = () => {
                     onKeyUp={onKeyUp}
                     value={username}
                     autoFocus
-                    className="w-full h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-5 placeholder:text-[#B1B2B6] outline-none text-base"
+                    className="w-full h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-16 placeholder:text-[#B1B2B6] outline-none text-base"
                 />
+                <span className="absolute top-[14px] right-4 text-sm text-[#8B8D93]">
+                    Enter
+                </span>
             </div>
-            {err && <div>User not found!</div>}
-            {user && (
-                <div
-                    onClick={handleSelect}
-                    className="mt-5 flex items-center gap-4 rounded-xl hover:bg-[#6a8bfd] py-2 px-4 cursor-pointer"
-                >
-                    <Avatar size="medium" user={user} />
-                    <div className="flex flex-col gap-1 grow">
-                        <span className="text-base text-white flex  items-center justify-between">
-                            <div className="font-medium">
-                                {user.displayName}
-                            </div>
-                        </span>
+            {err && (
+                <>
+                    <div className="mt-5 w-full text-center text-sm">
+                        User not found!
                     </div>
-                </div>
+                    <div className="w-full h-[1px] bg-white/[0.1] mt-5"></div>
+                </>
+            )}
+            {user && (
+                <>
+                    <div
+                        onClick={handleSelect}
+                        className="mt-5 flex items-center gap-4 rounded-xl hover:bg-[#2E343D] py-2 px-4 cursor-pointer"
+                    >
+                        <Avatar size="medium" user={user} />
+                        <div className="flex flex-col gap-1 grow">
+                            <span className="text-base text-white flex  items-center justify-between">
+                                <div className="font-medium">
+                                    {user.displayName}
+                                </div>
+                            </span>
+                            <p className="text-sm text-[#8B8D93]">
+                                {user.email}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="w-full h-[1px] bg-white/[0.1] mt-5"></div>
+                </>
             )}
         </div>
     );

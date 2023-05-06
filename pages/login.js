@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { useAuth } from "@/firebase/authContext";
+import { useAuth } from "@/context/authContext";
 import Loader from "@/components/Loader";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
