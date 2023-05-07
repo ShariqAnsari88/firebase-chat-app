@@ -5,20 +5,18 @@ import Icon from "./Icon";
 import { GoKebabHorizontal } from "react-icons/go";
 import { BiBlock } from "react-icons/bi";
 import { RiChatDeleteLine } from "react-icons/ri";
-import useIsOnline from "@/hook/useIsOnline";
 
 const ChatHeader = (props) => {
-    const { data } = useChatContext();
-    const { online } = useIsOnline(data?.user?.uid);
+    const { users, data } = useChatContext();
+    const online = users[data.user.uid]?.isOnline;
+    const user = users[data.user.uid];
     return (
         <div className="flex justify-between items-center pb-5 border-b border-white/[0.05]">
-            {data?.user && (
+            {user && (
                 <div className="flex items-center gap-3">
-                    <Avatar size="large" user={data?.user} />
+                    <Avatar size="large" user={user} />
                     <div>
-                        <div className="font-medium">
-                            {data.user.displayName}
-                        </div>
+                        <div className="font-medium">{user.displayName}</div>
                         <p className="text-sm text-[#8B8D93]">
                             {online ? "Online" : "Offline"}
                         </p>

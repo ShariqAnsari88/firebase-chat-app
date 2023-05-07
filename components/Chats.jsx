@@ -25,22 +25,18 @@ const Chats = () => {
         useChatContext();
 
     useEffect(() => {
-        getAllUsers();
-    }, []);
-
-    const getAllUsers = async () => {
-        setUsers([]);
-        const querySnapshot = await getDocs(collection(db, "users"));
-        querySnapshot.forEach((doc) => {
-            setUsers((prevState) => {
-                return {
-                    ...prevState,
-                    [doc.id]: { ...doc.data() },
-                };
+        const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+            const updatedUsers = {};
+            snapshot.forEach((doc) => {
+                updatedUsers[doc.id] = doc.data();
             });
+            setUsers(updatedUsers);
+            if (!isBlockExecuted) {
+                setisUsersFetched(true);
+            }
         });
-        setisUsersFetched(true);
-    };
+        return unsubscribe;
+    }, []);
 
     useEffect(() => {
         const getChats = () => {

@@ -13,7 +13,7 @@ import DeleteMsgPopup from "./popup/DeleteMsgPopup";
 
 const Message = ({ message }) => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
-    const { data, setEditMsg } = useChatContext();
+    const { users, data, setEditMsg } = useChatContext();
     const { currentUser } = useAuth();
     const [showMenu, setShowMenu] = useState(false);
 
@@ -84,7 +84,7 @@ const Message = ({ message }) => {
             >
                 <Avatar
                     size="small"
-                    user={self ? currentUser : data.user}
+                    user={self ? currentUser : users[data.user.uid]}
                     className="mb-4"
                 />
                 <div

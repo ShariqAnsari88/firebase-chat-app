@@ -1,10 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import useIsOnline from "@/hook/useIsOnline";
 
 const Avatar = ({ size, user, onClick }) => {
-    const { online } = useIsOnline(user?.uid);
-
     const s =
         size === "small"
             ? 32
@@ -37,7 +34,7 @@ const Avatar = ({ size, user, onClick }) => {
             style={{ backgroundColor: user.color }}
             onClick={onClick}
         >
-            {online && (
+            {user?.isOnline && (
                 <>
                     {size === "large" && (
                         <span className="w-[10px] h-[10px] bg-green-500 rounded-full absolute bottom-[2px] right-[2px] " />
