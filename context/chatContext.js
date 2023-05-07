@@ -12,10 +12,11 @@ const ChatContext = createContext();
 export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
 
+    const [users, setUsers] = useState(false);
     const [inputText, setInputText] = useState("");
     const [attachment, setAttachment] = useState(null);
     const [editMsg, setEditMsg] = useState(null);
-    const [isTyping, setIsTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(null);
 
     const resetFooterStates = () => {
         setInputText("");
@@ -48,6 +49,8 @@ export const ChatContextProvider = ({ children }) => {
     return (
         <ChatContext.Provider
             value={{
+                users,
+                setUsers,
                 inputText,
                 setInputText,
                 attachment,

@@ -9,11 +9,40 @@ import { BiCheck, BiEdit } from "react-icons/bi";
 import { MdAddAPhoto, MdPhotoCamera, MdDeleteForever } from "react-icons/md";
 import UsersPopup from "./popup/UsersPopup";
 import { profileColors } from "@/utils/constants";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+import { useChatContext } from "@/context/chatContext";
 
 const LeftNav = () => {
     const [userPopup, setUserPopup] = useState(false);
     const [editProfile, setEditProfile] = useState(false);
-    const { signOut, currentUser } = useAuth();
+    const { signOut, currentUser, setCurrentUser } = useAuth();
+    const { data } = useChatContext();
+
+    const handleUpdateProfile = async (type, value) => {
+        let obj = { ...currentUser };
+        switch (type) {
+            case "color":
+                obj.color = value;
+
+                break;
+
+            default:
+                break;
+        }
+
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userDocRef, obj);
+
+        // const userChatDocRef = doc(db, "userChats", currentUser.uid);
+        // const userChatDoc = await getDoc(userChatDocRef);
+        // let updatedUserChatDoc = { ...userChatDoc.data() };
+        // updatedUserChatDoc[currentUser.uid + currentUser.uid].userInfo.color =
+        //     value;
+        // await updateDoc(userChatDocRef, updatedUserChatDoc);
+
+        setCurrentUser(obj);
+    };
 
     const editProfileContainer = () => {
         return (
@@ -66,6 +95,7 @@ const LeftNav = () => {
                             key={index}
                             className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-125"
                             style={{ backgroundColor: color }}
+                            onClick={() => handleUpdateProfile("color", color)}
                         >
                             {color === currentUser.color && (
                                 <BiCheck size={24} />

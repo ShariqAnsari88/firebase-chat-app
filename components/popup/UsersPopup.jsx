@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
 import PopupWrapper from "./PopupWrapper";
 import Search from "../Search";
 
 import {
-    collection,
     doc,
     getDoc,
-    getDocs,
     serverTimestamp,
     setDoc,
     updateDoc,
@@ -18,24 +15,8 @@ import { useAuth } from "@/context/authContext";
 import { useChatContext } from "@/context/chatContext";
 
 const UsersPopup = (props) => {
-    const [users, setUsers] = useState([]);
-
     const { currentUser } = useAuth();
-    const { dispatch } = useChatContext();
-
-    useEffect(() => {
-        getAllUsers();
-    }, []);
-
-    const getAllUsers = async () => {
-        setUsers([]);
-        const querySnapshot = await getDocs(collection(db, "users"));
-        querySnapshot.forEach((doc) => {
-            setUsers((prevState) => {
-                return [...prevState, { ...doc.data(), id: doc.id }];
-            });
-        });
-    };
+    const { users, dispatch } = useChatContext();
 
     const handleSelect = async (user) => {
         try {
@@ -96,7 +77,7 @@ const UsersPopup = (props) => {
             <div className="mt-5 flex flex-col gap-2 grow relative overflow-auto scrollbar">
                 <div className="absolute w-full">
                     {users &&
-                        users.map((user) => (
+                        Object.values(users).map((user) => (
                             <div
                                 onClick={() => handleSelect(user)}
                                 className="flex items-center gap-4 rounded-xl hover:bg-[#2E343D] py-2 px-4 cursor-pointer"
