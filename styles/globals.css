@@ -48,3 +48,17 @@ body {
     background-color: #2e343d;
     opacity: 1;
 }
+
+#ReactSimpleImageViewer {
+    z-index: 99;
+}
+.react-simple-image-viewer__close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #2e343d;
+}

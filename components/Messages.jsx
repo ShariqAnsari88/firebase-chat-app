@@ -7,13 +7,16 @@ import { useAuth } from "@/context/authContext";
 import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 const Messages = () => {
     const [messages, setMessages] = useState([]);
-    const { data } = useChatContext();
+    const { data, setIsTyping } = useChatContext();
     const { currentUser } = useAuth();
     const ref = useRef();
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
-            doc.exists() && setMessages(doc.data().messages);
+            if (doc.exists()) {
+                setMessages(doc.data().messages);
+                setIsTyping(doc.data()?.typing?.[data.user.uid] || false);
+            }
             setTimeout(() => {
                 scrollToBottom();
             }, 0);

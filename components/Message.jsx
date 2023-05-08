@@ -10,16 +10,19 @@ import Icon from "./Icon";
 import Menu from "./Menu";
 import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 import DeleteMsgPopup from "./popup/DeleteMsgPopup";
+import ImageViewer from "react-simple-image-viewer";
 
 const Message = ({ message }) => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
-    const { users, data, setEditMsg } = useChatContext();
+    const { users, data, setEditMsg, imageViewer, setImageViewer } =
+        useChatContext();
     const { currentUser } = useAuth();
     const [showMenu, setShowMenu] = useState(false);
 
     const self = message.sender === currentUser.uid;
 
     const ref = useRef();
+    const imagePreviewUrl = useRef(message.img || null);
 
     const timestamp = new Timestamp(
         message.date?.seconds,
@@ -88,23 +91,43 @@ const Message = ({ message }) => {
                     className="mb-4"
                 />
                 <div
-                    className={`group flex flex-col gap-4 py-4 px-6 rounded-3xl relative ${
+                    className={`group flex flex-col gap-4 p-4 rounded-3xl relative ${
                         self
                             ? "rounded-br-md bg-[#2E343D]"
                             : "rounded-bl-md bg-[#131313]"
                     }`}
                 >
-                    <div
-                        className="text-sm"
-                        dangerouslySetInnerHTML={{
-                            __html: wrapEmojisInHtmlTag(message.text),
-                        }}
-                    ></div>
+                    {message.text && (
+                        <div
+                            className="text-sm"
+                            dangerouslySetInnerHTML={{
+                                __html: wrapEmojisInHtmlTag(message.text),
+                            }}
+                        ></div>
+                    )}
                     {message.img && (
-                        <img
-                            src={message.img}
-                            className="rounded-3xl max-w-[250px]"
-                        />
+                        <>
+                            <img
+                                src={message.img}
+                                className="rounded-3xl max-w-[250px]"
+                                onClick={() =>
+                                    setImageViewer({
+                                        msgId: message.id,
+                                        url: message.img,
+                                    })
+                                }
+                            />
+                            {imageViewer &&
+                                imageViewer?.msgId === message?.id && (
+                                    <ImageViewer
+                                        src={[imageViewer.url]}
+                                        currentIndex={0}
+                                        disableScroll={false}
+                                        closeOnClickOutside={true}
+                                        onClose={() => setImageViewer(null)}
+                                    />
+                                )}
+                        </>
                     )}
 
                     <div

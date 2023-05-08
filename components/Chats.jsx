@@ -144,6 +144,8 @@ const Chats = () => {
                                     </span>
                                     <p className="text-sm text-[#8B8D93] line-clamp-1">
                                         {chat[1].lastMessage?.text ||
+                                            (chat[1].lastMessage?.img &&
+                                                "image") ||
                                             "Send first message"}
                                     </p>
                                 </div>

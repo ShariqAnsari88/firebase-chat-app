@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 import { useChatContext } from "@/context/chatContext";
 import { useAuth } from "@/context/authContext";
 import { db, storage } from "@/firebase/firebase";
@@ -10,7 +8,6 @@ import {
     arrayUnion,
     doc,
     getDoc,
-    onSnapshot,
     serverTimestamp,
     updateDoc,
 } from "firebase/firestore";
@@ -27,25 +24,11 @@ const Composebar = () => {
         setInputText,
         attachment,
         setAttachment,
+        setAttachmentPreview,
         data,
         editMsg,
         setEditMsg,
-        setIsTyping,
     } = useChatContext();
-
-    useEffect(() => {
-        const unsubscribe = onSnapshot(
-            doc(db, "userChats", currentUser.uid),
-            (docSnapshot) => {
-                const data = docSnapshot.data();
-                setIsTyping(data?.isTyping || false);
-            }
-        );
-
-        return () => {
-            unsubscribe();
-        };
-    }, [currentUser.uid]);
 
     const handleSend = async () => {
         if (attachment) {
@@ -99,22 +82,24 @@ const Composebar = () => {
             });
         }
 
+        let msg = { text: inputText };
+        if (attachment) {
+            msg.img = true;
+        }
+
         await updateDoc(doc(db, "userChats", currentUser.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text: inputText,
-            },
+            [data.chatId + ".lastMessage"]: msg,
             [data.chatId + ".date"]: serverTimestamp(),
         });
 
         await updateDoc(doc(db, "userChats", data.user.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text: inputText,
-            },
+            [data.chatId + ".lastMessage"]: msg,
             [data.chatId + ".date"]: serverTimestamp(),
         });
 
         setInputText("");
         setAttachment(null);
+        setAttachmentPreview(null);
     };
 
     const handleEdit = async () => {
@@ -184,6 +169,7 @@ const Composebar = () => {
 
             setInputText("");
             setAttachment(null);
+            setAttachmentPreview(null);
             setEditMsg(null);
         } catch (err) {
             console.error(err);
@@ -191,15 +177,16 @@ const Composebar = () => {
     };
 
     const onKeyUp = (event) => {
-        if (event.key === "Enter") {
+        if (event.key === "Enter" && (inputText || attachment)) {
             !editMsg ? handleSend() : handleEdit();
         }
     };
 
     const handleTyping = async (event) => {
         setInputText(event.target.value);
-        await updateDoc(doc(db, "userChats", data?.user?.uid), {
-            isTyping: true,
+
+        await updateDoc(doc(db, "chats", data.chatId), {
+            [`typing.${currentUser.uid}`]: true,
         });
 
         // If the user was previously typing, clear the timeout
@@ -212,8 +199,8 @@ const Composebar = () => {
             // Send a typing indicator to other users indicating that this user has stopped typing
             console.log("User has stopped typing");
 
-            await updateDoc(doc(db, "userChats", data?.user?.uid), {
-                isTyping: false,
+            await updateDoc(doc(db, "chats", data.chatId), {
+                [`typing.${currentUser.uid}`]: false,
             });
 
             // Reset the timeout

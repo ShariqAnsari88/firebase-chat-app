@@ -5,6 +5,7 @@ import Icon from "./Icon";
 import { CgAttachment } from "react-icons/cg";
 import { IoClose } from "react-icons/io5";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { MdDeleteForever } from "react-icons/md";
 
 import EmojiPicker from "emoji-picker-react";
 import ClickAwayListener from "react-click-away-listener";
@@ -13,8 +14,17 @@ import Composebar from "./Composebar";
 const ChatFooter = () => {
     const [showImojiPicker, setShowImojiPicker] = useState(false);
 
-    const { inputText, setInputText, data, editMsg, setEditMsg, isTyping } =
-        useChatContext();
+    const {
+        inputText,
+        setInputText,
+        data,
+        editMsg,
+        setEditMsg,
+        isTyping,
+        setAttachment,
+        attachmentPreview,
+        setAttachmentPreview,
+    } = useChatContext();
 
     useEffect(() => {
         setInputText(editMsg?.text || "");
@@ -26,14 +36,41 @@ const ChatFooter = () => {
         setInputText((text += emojiData.emoji));
     };
 
+    const onFileChange = (e) => {
+        const file = e.target.files[0];
+        setAttachment(file);
+
+        if (file) {
+            const blobUrl = URL.createObjectURL(file);
+            setAttachmentPreview(blobUrl);
+        }
+    };
+
     return (
         <div className="flex items-center bg-[#131313]/[0.5] p-2 rounded-xl relative">
+            {attachmentPreview && (
+                <div className="absolute w-[100px] h-[100px] bottom-16 left-0 bg-[#131313] p-2 rounded-md">
+                    <img
+                        src={attachmentPreview}
+                        className="w-full h-full object-contain object-center"
+                    />
+                    <div
+                        className="w-6 h-6 rounded-full bg-red-500 flex justify-center items-center absolute -right-2 -top-2 cursor-pointer"
+                        onClick={() => {
+                            setAttachment(null);
+                            setAttachmentPreview(null);
+                        }}
+                    >
+                        <MdDeleteForever size={14} />
+                    </div>
+                </div>
+            )}
             <div className="shrink-0">
                 <input
                     type="file"
                     id="fileUploader"
                     className="hidden"
-                    onChange={(e) => setImg(e.target.files[0])}
+                    onChange={onFileChange}
                 />
                 <label htmlFor="fileUploader">
                     <Icon

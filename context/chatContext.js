@@ -15,13 +15,17 @@ export const ChatContextProvider = ({ children }) => {
     const [users, setUsers] = useState(false);
     const [inputText, setInputText] = useState("");
     const [attachment, setAttachment] = useState(null);
+    const [attachmentPreview, setAttachmentPreview] = useState(null);
     const [editMsg, setEditMsg] = useState(null);
     const [isTyping, setIsTyping] = useState(null);
+    const [imageViewer, setImageViewer] = useState(null);
 
     const resetFooterStates = () => {
         setInputText("");
         setAttachment(null);
+        setAttachmentPreview(null);
         setEditMsg(null);
+        setImageViewer(null);
     };
 
     const INITIAL_STATE = {
@@ -55,6 +59,8 @@ export const ChatContextProvider = ({ children }) => {
                 setInputText,
                 attachment,
                 setAttachment,
+                attachmentPreview,
+                setAttachmentPreview,
                 data: state,
                 dispatch,
                 editMsg,
@@ -62,6 +68,8 @@ export const ChatContextProvider = ({ children }) => {
                 isTyping,
                 setIsTyping,
                 resetFooterStates,
+                imageViewer,
+                setImageViewer,
             }}
         >
             {children}
