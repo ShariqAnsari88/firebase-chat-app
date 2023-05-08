@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { db } from "@/firebase/firebase";
 import {
@@ -17,8 +17,9 @@ const Chats = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [search, setSearch] = useState("");
-    const [isBlockExecuted, setisBlockExecuted] = useState(false);
-    const [isUsersFetched, setisUsersFetched] = useState(false);
+
+    const isUsersFetchedRef = useRef(false);
+    const isBlockExecutedRef = useRef(false);
 
     const { currentUser } = useAuth();
     const { users, setUsers, data, dispatch, resetFooterStates } =
@@ -31,8 +32,8 @@ const Chats = () => {
                 updatedUsers[doc.id] = doc.data();
             });
             setUsers(updatedUsers);
-            if (!isBlockExecuted) {
-                setisUsersFetched(true);
+            if (!isBlockExecutedRef.current) {
+                isUsersFetchedRef.current = true;
             }
         });
         return unsubscribe;
@@ -50,7 +51,11 @@ const Chats = () => {
                         if (data.hasOwnProperty("isTyping"))
                             delete data.isTyping;
 
-                        if (isUsersFetched && !isBlockExecuted) {
+                        if (
+                            isUsersFetchedRef.current &&
+                            !isBlockExecutedRef.current &&
+                            users
+                        ) {
                             const firstChat = Object.values(data).sort(
                                 (a, b) => {
                                     return b.date - a.date;
@@ -62,7 +67,7 @@ const Chats = () => {
                                 type: "CHANGE_USER",
                                 payload: user,
                             });
-                            setisBlockExecuted(true);
+                            isBlockExecutedRef.current = true;
                         }
                     }
                 }
@@ -70,7 +75,7 @@ const Chats = () => {
             return () => unsub();
         };
         currentUser.uid && getChats();
-    }, [isUsersFetched, !isBlockExecuted]);
+    }, [isBlockExecutedRef.current, users]);
 
     useEffect(() => {
         resetFooterStates();
