@@ -4,9 +4,12 @@ import { db } from "@/firebase/firebase";
 import {
     collection,
     doc,
-    getDocs,
     onSnapshot,
+    query,
     Timestamp,
+    where,
+    getDoc,
+    updateDoc,
 } from "firebase/firestore";
 import { useChatContext } from "@/context/chatContext";
 import Avatar from "./Avatar";
@@ -17,6 +20,7 @@ const Chats = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [search, setSearch] = useState("");
+    const [unreadMsgs, setUnreadMsgs] = useState({});
 
     const isUsersFetchedRef = useRef(false);
     const isBlockExecutedRef = useRef(false);
@@ -38,6 +42,37 @@ const Chats = () => {
         });
         return unsubscribe;
     }, []);
+
+    useEffect(() => {
+        const documentIds = Object.keys(chats);
+        if (documentIds.length === 0) return;
+        const q = query(
+            collection(db, "chats"),
+            where("__name__", "in", documentIds)
+        );
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            let msgs = {};
+            snapshot.forEach((doc) => {
+                if (doc.id !== data.chatId) {
+                    msgs[doc.id] = doc
+                        .data()
+                        .messages?.filter(
+                            (m) =>
+                                m?.read === false &&
+                                m.sender !== currentUser.uid
+                        );
+                }
+                Object.keys(msgs || {}).map((c) => {
+                    if (msgs[c]?.length < 1) {
+                        delete msgs[c];
+                    }
+                });
+            });
+            setUnreadMsgs(msgs);
+            console.log("$$$$$$$$$$", msgs);
+        });
+        return unsubscribe;
+    }, [chats, selectedChat]);
 
     useEffect(() => {
         const getChats = () => {
@@ -62,11 +97,13 @@ const Chats = () => {
                                 }
                             )[0];
                             const user = users[firstChat?.userInfo?.uid];
-                            setSelectedChat(user);
-                            dispatch({
-                                type: "CHANGE_USER",
-                                payload: user,
-                            });
+                            const chatId =
+                                currentUser.uid > user.uid
+                                    ? currentUser.uid + user.uid
+                                    : user.uid + currentUser.uid;
+
+                            handleSelect(user);
+                            readChat(chatId);
                             isBlockExecutedRef.current = true;
                         }
                     }
@@ -93,9 +130,25 @@ const Chats = () => {
         )
         .sort((a, b) => b[1].date - a[1].date);
 
-    const handleSelect = (user) => {
+    const readChat = async (chatId) => {
+        const chatRef = doc(db, "chats", chatId);
+        const chatDoc = await getDoc(chatRef);
+        let updatedMessages = chatDoc.data().messages.map((message) => {
+            if (message?.read === false) {
+                message.read = true;
+            }
+            return message;
+        });
+        await updateDoc(chatRef, { messages: updatedMessages });
+    };
+
+    const handleSelect = (user, selectedChatId) => {
         setSelectedChat(user);
         dispatch({ type: "CHANGE_USER", payload: user });
+
+        if (unreadMsgs?.[selectedChatId]?.length > 0) {
+            readChat(selectedChatId);
+        }
     };
 
     return (
@@ -125,7 +178,8 @@ const Chats = () => {
                         return (
                             <li
                                 key={chat[0]}
-                                onClick={() => handleSelect(user)}
+                                id={chat[0]}
+                                onClick={() => handleSelect(user, chat[0])}
                                 className={`h-[90px] flex items-center gap-4 rounded-3xl hover:bg-[#131313] p-4 cursor-pointer ${
                                     selectedChat?.uid === user.uid
                                         ? "bg-[#131313]"
@@ -133,7 +187,7 @@ const Chats = () => {
                                 }`}
                             >
                                 <Avatar size="x-large" user={user} />
-                                <div className="flex flex-col gap-1 grow">
+                                <div className="flex flex-col gap-1 grow relative">
                                     <span className="text-base text-white flex  items-center justify-between">
                                         <div className="font-medium">
                                             {user.displayName}
@@ -148,6 +202,12 @@ const Chats = () => {
                                                 "image") ||
                                             "Send first message"}
                                     </p>
+
+                                    {!!unreadMsgs?.[chat[0]]?.length && (
+                                        <span className="absolute right-0 top-7 min-w-[20px] h-5 rounded-full bg-red-500 flex justify-center items-center text-sm">
+                                            {unreadMsgs?.[chat[0]]?.length}
+                                        </span>
+                                    )}
                                 </div>
                             </li>
                         );

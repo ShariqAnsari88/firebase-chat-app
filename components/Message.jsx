@@ -11,6 +11,7 @@ import Menu from "./Menu";
 import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
 import DeleteMsgPopup from "./popup/DeleteMsgPopup";
 import ImageViewer from "react-simple-image-viewer";
+import Image from "next/image";
 
 const Message = ({ message }) => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -107,8 +108,10 @@ const Message = ({ message }) => {
                     )}
                     {message.img && (
                         <>
-                            <img
+                            <Image
                                 src={message.img}
+                                width={250}
+                                height={250}
                                 className="rounded-3xl max-w-[250px]"
                                 onClick={() =>
                                     setImageViewer({

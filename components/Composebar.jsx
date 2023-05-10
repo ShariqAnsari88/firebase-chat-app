@@ -65,6 +65,7 @@ const Composebar = () => {
                                     sender: currentUser.uid,
                                     date: Timestamp.now(),
                                     img: downloadURL,
+                                    read: false,
                                 }),
                             });
                         }
@@ -78,6 +79,7 @@ const Composebar = () => {
                     text: inputText,
                     sender: currentUser.uid,
                     date: Timestamp.now(),
+                    read: false,
                 }),
             });
         }
