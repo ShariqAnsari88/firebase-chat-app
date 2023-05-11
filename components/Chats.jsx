@@ -17,7 +17,6 @@ import { RiSearch2Line } from "react-icons/ri";
 import { formatDate } from "@/utils/helpers";
 
 const Chats = () => {
-    const [selectedChat, setSelectedChat] = useState(null);
     const [search, setSearch] = useState("");
     const [unreadMsgs, setUnreadMsgs] = useState({});
 
@@ -28,6 +27,8 @@ const Chats = () => {
     const {
         chats,
         setChats,
+        selectedChat,
+        setSelectedChat,
         users,
         setUsers,
         data,
@@ -87,6 +88,7 @@ const Chats = () => {
                 (doc) => {
                     if (doc.exists()) {
                         const data = doc.data();
+
                         setChats(data);
 
                         if (data.hasOwnProperty("isTyping"))
@@ -97,11 +99,14 @@ const Chats = () => {
                             !isBlockExecutedRef.current &&
                             users
                         ) {
-                            const firstChat = Object.values(data).sort(
-                                (a, b) => {
+                            const firstChat = Object.values(data)
+                                .filter(
+                                    (chat) =>
+                                        !chat?.hasOwnProperty("chatDeleted")
+                                )
+                                .sort((a, b) => {
                                     return b.date - a.date;
-                                }
-                            )[0];
+                                })[0];
                             const user = users[firstChat?.userInfo?.uid];
                             const chatId =
                                 currentUser.uid > user.uid
@@ -125,6 +130,7 @@ const Chats = () => {
     }, [data?.chatId]);
 
     const filteredChats = Object.entries(chats || {})
+        .filter(([, chat]) => !chat?.hasOwnProperty("chatDeleted"))
         .filter(
             ([, chat]) =>
                 chat?.userInfo?.displayName

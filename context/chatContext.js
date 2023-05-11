@@ -13,6 +13,7 @@ export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
 
     const [chats, setChats] = useState({});
+    const [selectedChat, setSelectedChat] = useState(null);
     const [users, setUsers] = useState(false);
     const [inputText, setInputText] = useState("");
     const [attachment, setAttachment] = useState(null);
@@ -44,6 +45,8 @@ export const ChatContextProvider = ({ children }) => {
                             ? currentUser.uid + action.payload.uid
                             : action.payload.uid + currentUser.uid,
                 };
+            case "EMPTY":
+                return INITIAL_STATE;
             default:
                 return state;
         }
@@ -56,6 +59,8 @@ export const ChatContextProvider = ({ children }) => {
             value={{
                 chats,
                 setChats,
+                selectedChat,
+                setSelectedChat,
                 users,
                 setUsers,
                 inputText,

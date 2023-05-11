@@ -2,6 +2,7 @@ import PopupWrapper from "./PopupWrapper";
 import Search from "../Search";
 
 import {
+    deleteField,
     doc,
     getDoc,
     serverTimestamp,
@@ -60,6 +61,10 @@ const UsersPopup = (props) => {
                         color: currentUser.color,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
+                });
+            } else {
+                await updateDoc(doc(db, "userChats", currentUser.uid), {
+                    [combinedId + ".chatDeleted"]: deleteField(),
                 });
             }
 

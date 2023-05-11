@@ -18,3 +18,5 @@ export const profileColors = [
 
 export const DELETED_FOR_ME = "DELETED_FOR_ME";
 export const DELETED_FOR_EVERYONE = "DELETED_FOR_EVERYONE";
+export const CLEAR_CHAT = "CLEAR_CHAT";
+export const DELETE_CHAT = "DELETE_CHAT";

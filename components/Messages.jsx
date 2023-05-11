@@ -4,7 +4,11 @@ import { useChatContext } from "@/context/chatContext";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { useAuth } from "@/context/authContext";
-import { DELETED_FOR_ME, DELETED_FOR_EVERYONE } from "@/utils/constants";
+import {
+    DELETED_FOR_ME,
+    DELETED_FOR_EVERYONE,
+    CHAT_DELETED,
+} from "@/utils/constants";
 const Messages = () => {
     const [messages, setMessages] = useState([]);
     const { data, setIsTyping } = useChatContext();
@@ -40,7 +44,8 @@ const Messages = () => {
                 ?.filter(
                     (m) =>
                         m?.deletedInfo?.[currentUser.uid] !== DELETED_FOR_ME &&
-                        !m?.deletedInfo?.deletedForEveryone
+                        !m?.deletedInfo?.deletedForEveryone &&
+                        !m?.deleteChatInfo?.[currentUser.uid]
                 )
                 ?.map((m) => {
                     return <Message message={m} key={m.id} />;

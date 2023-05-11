@@ -215,7 +215,7 @@ const LeftNav = () => {
     return (
         <div
             className={`${
-                editProfile ? "w-[400px]" : "w-[80px] items-center"
+                editProfile ? "w-[350px]" : "w-[80px] items-center"
             } flex flex-col justify-between py-5 shrink-0 transition-all`}
         >
             {editProfile ? (

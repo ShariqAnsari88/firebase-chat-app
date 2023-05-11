@@ -9,6 +9,7 @@ import {
     serverTimestamp,
     getDoc,
     setDoc,
+    deleteField,
 } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { useAuth } from "@/context/authContext";
@@ -76,6 +77,10 @@ const Search = () => {
                         color: currentUser.color,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
+                });
+            } else {
+                await updateDoc(doc(db, "userChats", currentUser.uid), {
+                    [combinedId + ".chatDeleted"]: deleteField(),
                 });
             }
 

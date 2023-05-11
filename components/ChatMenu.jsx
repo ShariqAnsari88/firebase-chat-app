@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/authContext";
 import { useChatContext } from "@/context/chatContext";
 import { db } from "@/firebase/firebase";
+import { CLEAR_CHAT, DELETE_CHAT } from "@/utils/constants";
 import {
     arrayRemove,
     arrayUnion,
@@ -11,7 +12,7 @@ import {
 import ClickAwayListener from "react-click-away-listener";
 
 const ChatMenu = ({ setShowMenu, showMenu }) => {
-    const { data, users } = useChatContext();
+    const { data, users, dispatch, chats, setSelectedChat } = useChatContext();
     const { currentUser } = useAuth();
 
     const isUserBlocked = users[currentUser.uid]?.blockedUsers?.find(
@@ -39,6 +40,51 @@ const ChatMenu = ({ setShowMenu, showMenu }) => {
         }
     };
 
+    const handleDelete = async () => {
+        try {
+            const chatRef = doc(db, "chats", data.chatId);
+
+            // Retrieve the chat document from Firestore
+            const chatDoc = await getDoc(chatRef);
+
+            // Create a new "messages" array that excludes the message with the matching ID
+            const updatedMessages = chatDoc.data().messages.map((message) => {
+                message.deleteChatInfo = {
+                    ...message.deleteChatInfo,
+                    [currentUser.uid]: true,
+                };
+                return message;
+            });
+
+            // Update the chat document in Firestore with the new "messages" array
+            await updateDoc(chatRef, { messages: updatedMessages });
+
+            await updateDoc(doc(db, "userChats", currentUser.uid), {
+                [data.chatId + ".chatDeleted"]: true,
+            });
+
+            const chatId = Object.keys(chats || {}).filter(
+                (id) => id !== data.chatId
+            );
+
+            const filteredChats = Object.entries(chats || {})
+                .filter(([id, chat]) => id !== data.chatId)
+                .sort((a, b) => b[1].date - a[1].date);
+
+            if (filteredChats.length > 0) {
+                setSelectedChat(filteredChats[0][1].userInfo);
+                dispatch({
+                    type: "CHANGE_USER",
+                    payload: filteredChats[0][1].userInfo,
+                });
+            } else {
+                dispatch({ type: "EMPTY" });
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
             <div
@@ -63,6 +109,7 @@ const ChatMenu = ({ setShowMenu, showMenu }) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             setShowMenu(false);
+                            handleDelete();
                         }}
                     >
                         Delete chat
