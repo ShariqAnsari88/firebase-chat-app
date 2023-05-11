@@ -126,14 +126,14 @@ const Login = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="w-full h-14 bg-[#2E343D] rounded-xl outline-none border-none px-5 text-c3"
+                        className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
                         autocomplete="off"
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        className="w-full h-14 bg-[#2E343D] rounded-xl outline-none border-none px-5 text-c3"
+                        className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
                         autocomplete="off"
                     />
                     <div className="text-right w-full text-c3">

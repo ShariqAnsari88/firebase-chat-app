@@ -17,7 +17,6 @@ import { RiSearch2Line } from "react-icons/ri";
 import { formatDate } from "@/utils/helpers";
 
 const Chats = () => {
-    const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [search, setSearch] = useState("");
     const [unreadMsgs, setUnreadMsgs] = useState({});
@@ -26,8 +25,15 @@ const Chats = () => {
     const isBlockExecutedRef = useRef(false);
 
     const { currentUser } = useAuth();
-    const { users, setUsers, data, dispatch, resetFooterStates } =
-        useChatContext();
+    const {
+        chats,
+        setChats,
+        users,
+        setUsers,
+        data,
+        dispatch,
+        resetFooterStates,
+    } = useChatContext();
 
     useEffect(() => {
         const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {

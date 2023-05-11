@@ -12,6 +12,7 @@ const ChatContext = createContext();
 export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
 
+    const [chats, setChats] = useState({});
     const [users, setUsers] = useState(false);
     const [inputText, setInputText] = useState("");
     const [attachment, setAttachment] = useState(null);
@@ -53,6 +54,8 @@ export const ChatContextProvider = ({ children }) => {
     return (
         <ChatContext.Provider
             value={{
+                chats,
+                setChats,
                 users,
                 setUsers,
                 inputText,
