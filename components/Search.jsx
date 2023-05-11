@@ -90,10 +90,7 @@ const Search = () => {
     return (
         <div className="shrink-0">
             <div className="relative">
-                <RiSearch2Line
-                    className="absolute top-4 left-4"
-                    color="#B1B2B6"
-                />
+                <RiSearch2Line className="absolute top-4 left-4 text-c3" />
                 <input
                     type="text"
                     placeholder="Search user..."
@@ -101,9 +98,9 @@ const Search = () => {
                     onKeyUp={onKeyUp}
                     value={username}
                     autoFocus
-                    className="w-full h-12 rounded-xl bg-[#131313]/[0.5] pl-11 pr-16 placeholder:text-[#B1B2B6] outline-none text-base"
+                    className="w-full h-12 rounded-xl bg-c1/[0.5] pl-11 pr-16 placeholder:text-c3 outline-none text-base"
                 />
-                <span className="absolute top-[14px] right-4 text-sm text-[#8B8D93]">
+                <span className="absolute top-[14px] right-4 text-sm text-c3">
                     Enter
                 </span>
             </div>
@@ -119,7 +116,7 @@ const Search = () => {
                 <>
                     <div
                         onClick={handleSelect}
-                        className="mt-5 flex items-center gap-4 rounded-xl hover:bg-[#2E343D] py-2 px-4 cursor-pointer"
+                        className="mt-5 flex items-center gap-4 rounded-xl hover:bg-c5 py-2 px-4 cursor-pointer"
                     >
                         <Avatar size="medium" user={user} />
                         <div className="flex flex-col gap-1 grow">
@@ -128,9 +125,7 @@ const Search = () => {
                                     {user.displayName}
                                 </div>
                             </span>
-                            <p className="text-sm text-[#8B8D93]">
-                                {user.email}
-                            </p>
+                            <p className="text-sm text-c3">{user.email}</p>
                         </div>
                     </div>
                     <div className="w-full h-[1px] bg-white/[0.1] mt-5"></div>

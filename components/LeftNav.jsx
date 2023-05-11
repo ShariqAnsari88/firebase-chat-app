@@ -128,7 +128,7 @@ const LeftNav = () => {
                 <ToastMessage />
                 <Icon
                     size="small"
-                    className="absolute top-0 right-5"
+                    className="absolute top-0 right-5 hover:bg-c2"
                     icon={<IoClose size={20} />}
                     onClick={() => setEditProfile(false)}
                 />
@@ -167,11 +167,10 @@ const LeftNav = () => {
                 </div>
                 <div className="mt-5 flex flex-col items-center">
                     <div className="flex items-center gap-2">
-                        {!nameEdited && <BiEdit color="#8B8D93" />}
+                        {!nameEdited && <BiEdit className="text-c3" />}
                         {nameEdited && (
                             <BsFillCheckCircleFill
-                                className="cursor-pointer"
-                                color="#6b8afd"
+                                className="cursor-pointer text-c4"
                                 onClick={() =>
                                     handleUpdateProfile(
                                         "name",
@@ -193,9 +192,7 @@ const LeftNav = () => {
                             {currentUser.displayName}
                         </div>
                     </div>
-                    <span className="text-[#8B8D93] text-sm">
-                        {currentUser.email}
-                    </span>
+                    <span className="text-c3 text-sm">{currentUser.email}</span>
                 </div>
                 <div className="grid grid-cols-5 gap-4 mt-5">
                     {profileColors.map((color, index) => (
@@ -252,6 +249,7 @@ const LeftNav = () => {
                 />
                 <Icon
                     size="x-large"
+                    className="hover:bg-c2"
                     icon={<IoLogOutOutline size={24} />}
                     onClick={signOut}
                 />

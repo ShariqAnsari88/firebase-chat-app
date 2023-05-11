@@ -136,11 +136,11 @@ const Register = () => {
     return isLoading || (!isLoading && !!currentUser) ? (
         <Loader />
     ) : (
-        <div className="h-[100vh] flex justify-center items-center bg-[#131313]">
+        <div className="h-[100vh] flex justify-center items-center bg-c1">
             <div className="flex items-center flex-col">
                 <div className="text-center">
                     <div className="text-4xl font-bold">Create New Account</div>
-                    <div className="mt-3 text-[#8B8D93]">
+                    <div className="mt-3 text-c3">
                         Connect and chat with anyone, anywhere
                     </div>
                 </div>
@@ -149,7 +149,7 @@ const Register = () => {
                         className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
                         onClick={signInWithGoogle}
                     >
-                        <div className="flex items-center justify-center gap-3 text-white font-semibold bg-[#131313] w-full h-full rounded-md">
+                        <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
                             <IoLogoGoogle size={24} />
                             <span>Login with Google</span>
                         </div>
@@ -158,16 +158,16 @@ const Register = () => {
                         className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
                         onClick={signInWithFacebook}
                     >
-                        <div className="flex items-center justify-center gap-3 text-white font-semibold bg-[#131313] w-full h-full rounded-md">
+                        <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
                             <IoLogoFacebook size={24} />
                             <span>Login with Facebook</span>
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-1">
-                    <span className="w-5 h-[1px] bg-[#8B8D93]"></span>
-                    <span className="text-[#8B8D93] font-semibold">OR</span>
-                    <span className="w-5 h-[1px] bg-[#8B8D93]"></span>
+                    <span className="w-5 h-[1px] bg-c3"></span>
+                    <span className="text-c3 font-semibold">OR</span>
+                    <span className="w-5 h-[1px] bg-c3"></span>
                 </div>
                 <form
                     onSubmit={handleSubmit}
@@ -176,21 +176,21 @@ const Register = () => {
                     <input
                         type="text"
                         placeholder="Display Name"
-                        className="w-full h-14 bg-[#2E343D] rounded-xl outline-none border-none px-5 text-[#8B8D93]"
+                        className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
                         autoComplete="off"
                         required
                     />
                     <input
                         type="email"
                         placeholder="Email"
-                        className="w-full h-14 bg-[#2E343D] rounded-xl outline-none border-none px-5 text-[#8B8D93]"
+                        className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
                         autoComplete="off"
                         required
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        className="w-full h-14 bg-[#2E343D] rounded-xl outline-none border-none px-5 text-[#8B8D93]"
+                        className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
                         autoComplete="off"
                         required
                     />
@@ -199,7 +199,7 @@ const Register = () => {
                         Sign Up
                     </button>
                 </form>
-                <div className="flex justify-center gap-1 text-[#8B8D93] mt-5">
+                <div className="flex justify-center gap-1 text-c3 mt-5">
                     <span>Already have an account?</span>
                     <Link
                         href="/login"

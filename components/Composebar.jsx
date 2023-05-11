@@ -214,7 +214,7 @@ const Composebar = () => {
         <div className="flex items-center gap-2 grow">
             <input
                 type="text"
-                className="grow w-full outline-0 px-2 py-2 text-white bg-transparent placeholder:text-[#B1B2B6] outline-none text-base"
+                className="grow w-full outline-0 px-2 py-2 text-white bg-transparent placeholder:text-c3 outline-none text-base"
                 placeholder="Type a message"
                 value={inputText}
                 onChange={handleTyping}
@@ -223,10 +223,10 @@ const Composebar = () => {
             <button
                 onClick={!editMsg ? handleSend : handleEdit}
                 className={`h-10 w-10 rounded-xl shrink-0 flex justify-center items-center ${
-                    inputText.trim().length > 0 ? "bg-[#6b8afd]" : ""
+                    inputText.trim().length > 0 ? "bg-c4" : ""
                 }`}
             >
-                <TbSend size={20} color="#fff" />
+                <TbSend size={20} className="text-white" />
             </button>
         </div>
     );

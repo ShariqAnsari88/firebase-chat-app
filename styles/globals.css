@@ -52,13 +52,15 @@ body {
 #ReactSimpleImageViewer {
     z-index: 99;
 }
-.react-simple-image-viewer__close {
+#ReactSimpleImageViewer .react-simple-image-viewer__close {
     width: 40px;
     height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: 50%;
     cursor: pointer;
     background-color: #2e343d;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 36px;
+    text-align: center;
+    padding-bottom: 10px;
 }

@@ -93,9 +93,7 @@ const Message = ({ message }) => {
                 />
                 <div
                     className={`group flex flex-col gap-4 p-4 rounded-3xl relative ${
-                        self
-                            ? "rounded-br-md bg-[#2E343D]"
-                            : "rounded-bl-md bg-[#131313]"
+                        self ? "rounded-br-md bg-c5" : "rounded-bl-md bg-c1"
                     }`}
                 >
                     {message.text && (
@@ -137,16 +135,16 @@ const Message = ({ message }) => {
                         className={`${
                             showMenu ? "" : "hidden"
                         } group-hover:flex absolute top-2 ${
-                            self
-                                ? "left-2 bg-[#2E343D]"
-                                : "right-2 bg-[#131313]"
+                            self ? "left-2 bg-c5" : "right-2 bg-c1"
                         }`}
                         onClick={() => setShowMenu(!showMenu)}
                     >
                         <Icon
                             size="medium"
                             className="hover:bg-inherit rounded-none"
-                            icon={<GoChevronDown size={24} color="#8B8D93" />}
+                            icon={
+                                <GoChevronDown size={24} className="text-c3" />
+                            }
                         />
                         {showMenu && (
                             <Menu
@@ -165,7 +163,7 @@ const Message = ({ message }) => {
                     self ? "justify-start flex-row-reverse mr-12" : "ml-12"
                 }`}
             >
-                <div className="text-xs text-[#8B8D93]">{formatDate(date)}</div>
+                <div className="text-xs text-c3">{formatDate(date)}</div>
             </div>
         </div>
     );

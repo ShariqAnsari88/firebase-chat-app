@@ -10,7 +10,7 @@ const PopupWrapper = (props) => {
                 onClick={props.onHide}
             />
             <div
-                className={`flex flex-col w-[500px] max-h-[80%]  bg-[#202329] relative z-10 rounded-3xl ${
+                className={`flex flex-col w-[500px] max-h-[80%]  bg-c2 relative z-10 rounded-3xl ${
                     props.shortHeight ? "" : "min-h-[600px]"
                 }`}
             >

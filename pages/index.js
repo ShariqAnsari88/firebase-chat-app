@@ -24,10 +24,10 @@ const Home = () => {
     return !currentUser ? (
         <Loader />
     ) : (
-        <div className="bg-[#131313] flex h-[100vh]">
+        <div className="bg-c1 flex h-[100vh]">
             <div className="flex w-full shrink-0">
                 <LeftNav />
-                <div className="flex bg-[#202329] grow">
+                <div className="flex bg-c2 grow">
                     <Sidebar />
                     {data.user && <Chat />}
                 </div>

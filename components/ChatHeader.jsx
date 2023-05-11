@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useChatContext } from "@/context/chatContext";
 import Avatar from "./Avatar";
 import Icon from "./Icon";
-import { GoKebabHorizontal } from "react-icons/go";
-import { BiBlock } from "react-icons/bi";
-import { RiChatDeleteLine } from "react-icons/ri";
+import { IoEllipsisVerticalSharp } from "react-icons/io5";
+import ChatMenu from "./ChatMenu";
 
 const ChatHeader = (props) => {
+    const [showMenu, setShowMenu] = useState(false);
     const { users, data } = useChatContext();
     const online = users[data.user.uid]?.isOnline;
     const user = users[data.user.uid];
@@ -17,7 +17,7 @@ const ChatHeader = (props) => {
                     <Avatar size="large" user={user} />
                     <div>
                         <div className="font-medium">{user.displayName}</div>
-                        <p className="text-sm text-[#8B8D93]">
+                        <p className="text-sm text-c3">
                             {online ? "Online" : "Offline"}
                         </p>
                     </div>
@@ -26,12 +26,18 @@ const ChatHeader = (props) => {
             <div className="flex items-center gap-2">
                 <Icon
                     size="large"
-                    icon={<BiBlock size={20} color="#8B8D93" />}
+                    className={`${showMenu ? "bg-c1" : ""}`}
+                    onClick={() => setShowMenu(true)}
+                    icon={
+                        <IoEllipsisVerticalSharp
+                            size={20}
+                            className="text-c3"
+                        />
+                    }
                 />
-                <Icon
-                    size="large"
-                    icon={<RiChatDeleteLine size={20} color="#8B8D93" />}
-                />
+                {showMenu && (
+                    <ChatMenu setShowMenu={setShowMenu} showMenu={showMenu} />
+                )}
             </div>
         </div>
     );

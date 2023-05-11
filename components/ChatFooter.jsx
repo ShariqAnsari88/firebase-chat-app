@@ -47,9 +47,9 @@ const ChatFooter = () => {
     };
 
     return (
-        <div className="flex items-center bg-[#131313]/[0.5] p-2 rounded-xl relative">
+        <div className="flex items-center bg-c1/[0.5] p-2 rounded-xl relative">
             {attachmentPreview && (
-                <div className="absolute w-[100px] h-[100px] bottom-16 left-0 bg-[#131313] p-2 rounded-md">
+                <div className="absolute w-[100px] h-[100px] bottom-16 left-0 bg-c1 p-2 rounded-md">
                     <img
                         src={attachmentPreview}
                         className="w-full h-full object-contain object-center"
@@ -75,7 +75,7 @@ const ChatFooter = () => {
                 <label htmlFor="fileUploader">
                     <Icon
                         size="large"
-                        icon={<CgAttachment size={20} color="#8B8D93" />}
+                        icon={<CgAttachment size={20} className="text-c3" />}
                     />
                 </label>
             </div>
@@ -83,8 +83,8 @@ const ChatFooter = () => {
             <div className="shrink-0 relative">
                 <Icon
                     size="large"
-                    className={`${showImojiPicker ? "bg-[#2E343D]" : ""}`}
-                    icon={<HiOutlineEmojiHappy size={24} color="#8B8D93" />}
+                    className={`${showImojiPicker ? "bg-c1" : ""}`}
+                    icon={<HiOutlineEmojiHappy size={24} className="text-c3" />}
                     onClick={() => setShowImojiPicker(true)}
                 />
                 {showImojiPicker && (
@@ -104,7 +104,7 @@ const ChatFooter = () => {
             </div>
 
             {isTyping && (
-                <div className="absolute -top-6 left-4 bg-[#202329] w-full h-6">
+                <div className="absolute -top-6 left-4 bg-c2 w-full h-6">
                     <div className="flex gap-2 w-full h-full opacity-50 text-sm text-white">
                         {`${data.user.displayName} is typing`}
                         <img src="/typing.svg" />
@@ -114,11 +114,11 @@ const ChatFooter = () => {
 
             {editMsg && (
                 <div
-                    className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#6b8afd] flex items-center gap-2 py-2 px-4 pr-2 rounded-full text-sm font-semibold cursor-pointer shadow-lg"
+                    className="absolute -top-12 left-1/2 -translate-x-1/2 bg-c4 flex items-center gap-2 py-2 px-4 pr-2 rounded-full text-sm font-semibold cursor-pointer shadow-lg"
                     onClick={() => setEditMsg(null)}
                 >
                     <span>Cancel edit</span>
-                    <IoClose size={20} color="#fff" />
+                    <IoClose size={20} className="text-white" />
                 </div>
             )}
 

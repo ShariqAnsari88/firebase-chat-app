@@ -1,13 +1,6 @@
-import React, { useEffect, useRef } from "react";
 import ClickAwayListener from "react-click-away-listener";
 
-const Menu = ({ self, setShowMenu, showMenu, setShowDeletePopup, editMsg }) => {
-    const ref = useRef();
-
-    useEffect(() => {
-        ref?.current?.scrollIntoViewIfNeeded();
-    }, [showMenu]);
-
+const ChatMenu = ({ setShowMenu, showMenu }) => {
     const handleClickAway = () => {
         setShowMenu(false);
     };
@@ -15,10 +8,7 @@ const Menu = ({ self, setShowMenu, showMenu, setShowDeletePopup, editMsg }) => {
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
             <div
-                ref={ref}
-                className={`w-[200px] absolute top-8 bg-c0 z-10 rounded-md overflow-hidden ${
-                    self ? "right-0" : "left-0"
-                }`}
+                className={`w-[200px] absolute top-[70px] right-5 bg-c0 z-10 rounded-md overflow-hidden`}
             >
                 <ul className="flex flex-col py-2">
                     {self && (
@@ -26,21 +16,20 @@ const Menu = ({ self, setShowMenu, showMenu, setShowDeletePopup, editMsg }) => {
                             className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                editMsg();
                                 setShowMenu(false);
                             }}
                         >
-                            Edit message
+                            Block user
                         </li>
                     )}
                     <li
                         className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
-                            setShowDeletePopup();
+                            setShowMenu(false);
                         }}
                     >
-                        Delete message
+                        Delete chat
                     </li>
                 </ul>
             </div>
@@ -48,4 +37,4 @@ const Menu = ({ self, setShowMenu, showMenu, setShowDeletePopup, editMsg }) => {
     );
 };
 
-export default Menu;
+export default ChatMenu;

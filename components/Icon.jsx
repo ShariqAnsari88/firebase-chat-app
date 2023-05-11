@@ -12,7 +12,7 @@ const Icon = ({ size, icon, onClick, className }) => {
 
     return (
         <div
-            className={`${c} rounded-full flex items-center justify-center hover:bg-[#2e333d] cursor-pointer ${className}`}
+            className={`${c} rounded-full flex items-center justify-center hover:bg-c1 cursor-pointer ${className}`}
             onClick={onClick}
         >
             {icon && icon}
