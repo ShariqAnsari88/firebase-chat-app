@@ -107,14 +107,17 @@ const Chats = () => {
                                 .sort((a, b) => {
                                     return b.date - a.date;
                                 })[0];
-                            const user = users[firstChat?.userInfo?.uid];
-                            const chatId =
-                                currentUser.uid > user.uid
-                                    ? currentUser.uid + user.uid
-                                    : user.uid + currentUser.uid;
 
-                            handleSelect(user);
-                            readChat(chatId);
+                            if (firstChat) {
+                                const user = users[firstChat?.userInfo?.uid];
+                                const chatId =
+                                    currentUser.uid > user.uid
+                                        ? currentUser.uid + user.uid
+                                        : user.uid + currentUser.uid;
+
+                                handleSelect(user);
+                                readChat(chatId);
+                            }
                             isBlockExecutedRef.current = true;
                         }
                     }

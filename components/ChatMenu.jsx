@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/authContext";
 import { useChatContext } from "@/context/chatContext";
 import { db } from "@/firebase/firebase";
-import { CLEAR_CHAT, DELETE_CHAT } from "@/utils/constants";
 import {
     arrayRemove,
     arrayUnion,

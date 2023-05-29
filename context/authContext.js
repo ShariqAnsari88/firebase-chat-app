@@ -31,9 +31,13 @@ export const UserProvider = ({ children }) => {
             return;
         }
 
-        await updateDoc(doc(db, "users", user.uid), {
-            isOnline: true,
-        });
+        const userDocExist = await getDoc(doc(db, "users", user.uid));
+        if (userDocExist.exists()) {
+            await updateDoc(doc(db, "users", user.uid), {
+                isOnline: true,
+            });
+        }
+
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
         setCurrentUser(userDoc.data());
